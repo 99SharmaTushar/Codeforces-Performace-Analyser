@@ -25,10 +25,10 @@ class ProfilePage extends Component {
         return(
             <div className="profileBody" style={{backgroundImage: `url(${background})`}}>
                 <div className="profile-card-wrap">
-                  <input onClick={this.handleClick} id="check" type="checkbox" className="check" /><label for="check" className="toggle"> + </label>
+                  <input onClick={this.handleClick} id="check" type="checkbox" className="check" /><label htmlFor="check" className="toggle"> + </label>
                   <div className="content" data-text={str} >
                     <div className="title">{user.handle}</div>
-                    <p>
+                    <span>
                     { this.state.toggle && (
                     <List>
                       <List.Item><List.Icon name="winner"/> Rating: {user.rating}</List.Item>
@@ -36,16 +36,16 @@ class ProfilePage extends Component {
                       <List.Item><List.Icon name="star outline"/> Contribution: {user.contribution}</List.Item>
                       <List.Item><List.Icon name="time"/> Reg: {t}</List.Item>
                       <List.Item> </List.Item>
-                      <List.Item ><p><List.Icon name="quote left"/>Experience is the name everyone gives to their mistakes <List.Icon name="quote right"/></p></List.Item>
+                      <List.Item ><span><List.Icon name="quote left"/>Experience is the name everyone gives to their mistakes <List.Icon name="quote right"/></span></List.Item>
                     </List>
                     )}
-                    </p>
+                    </span>
                   </div>
                   <div className="link-info">
                     <div className="photo" style={{background : `url(${user.titlePhoto})  #fff no-repeat center / cover` } }></div>
                   </div>
                 </div>
-                {this.state.toggle && (<ContestSelecter {...this.props} contests={this.props.contests} Id = {this.props.Id} />)}
+                {this.state.toggle && (<ContestSelecter {...this.props} contests={this.props.contests} updateContest = {this.props.updateContest} />)}
             </div>
             
         );

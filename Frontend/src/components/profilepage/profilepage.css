@@ -62,11 +62,12 @@
     font-weight:500;
     margin-bottom:30px;
   }
-  .profile-card-wrap .content p{
+  .profile-card-wrap .content span{
     margin:0;
     max-width:190px;
     line-height:24px;
     text-align:left;
+    display: block;
   }
   .profile-card-wrap .link-info{
     top:50%;

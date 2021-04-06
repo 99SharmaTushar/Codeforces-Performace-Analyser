@@ -11,7 +11,7 @@ class App extends Component {
   state = {
     user: {},
     contestsGiven: {},
-    contestId: ""
+    selectedContest: {}
   }
 
   updateUserInfo = (userObject) => {
@@ -22,16 +22,16 @@ class App extends Component {
     this.setState({contestsGiven: contestsGivenObject});
   }
 
-  updateContestId = (Id) => {
-    this.setState({contestId: Id});
+  updateContest = (contest) => {
+    this.setState({selectedContest: contest});
   }
 
   render(){
     return (
       <Router>
         <Route path="/" exact render={(props) => ( <HomePage {...props} updateUser={this.updateUserInfo} updateContests={this.updateContestsGivenInfo} />)} />
-        <Route path="/profile" render={(props) => ( <ProfilePage {...props} user = {this.state.user} contests = {this.state.contestsGiven} Id = {this.updateContestId} />)} />
-        <Route path="/report" render={(props) => ( <ReportPage {...props} id={this.state.contestId} />)} />
+        <Route path="/profile" render={(props) => ( <ProfilePage {...props} user = {this.state.user} contests = {this.state.contestsGiven} updateContest = {this.updateContest} />)} />
+        <Route path="/report" render={(props) => ( <ReportPage {...props} selectedContest = {this.state.selectedContest} />)} />
       </Router>
     );
   }

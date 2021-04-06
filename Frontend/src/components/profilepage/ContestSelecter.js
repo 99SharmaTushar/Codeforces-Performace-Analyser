@@ -29,7 +29,10 @@ class contestSelecter extends Component {
             this.setState({error: "Sorry, we can't analyse your performance without you letting us know the contest name !!"})
         }else {
             this.setState({error: ""});
-            this.props.Id(this.state.contestId);
+            var selectedContest = this.props.contests.contests.filter(obj => {
+                return (obj.contestId+"") === this.state.contestId
+            });
+            this.props.updateContest(selectedContest[0]);
             this.props.history.push("/report");
         }
     }
@@ -42,7 +45,7 @@ class contestSelecter extends Component {
         return (
             <div key={this.props.contests.contests} className="container">
                 <div className="headDiv">
-                    <Message info="true">
+                    <Message info={true}>
                     <Message.Header>Analyse Your Performace</Message.Header>
                     <Message.Content>(Note: You must have participated in the contest to be Evaluated)</Message.Content>
                     </Message>
