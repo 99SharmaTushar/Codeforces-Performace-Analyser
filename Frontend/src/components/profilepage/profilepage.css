@@ -1,0 +1,150 @@
+.profileBody{
+    margin:0;
+    color:#444;
+    overflow:hidden;
+    height: 100vh;
+    font:300 16px/18px Roboto, sans-serif;
+    background:url(https://images.unsplash.com/photo-1575330739287-90c6a473f9a9?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NDZ8fHBsYWluJTIwYmFja2dyb3VuZHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60) #031b21 no-repeat center fixed;
+    background-size:cover;
+  }  
+  
+  *,:after,:before{box-sizing:border-box}
+  .pull-left{float:left}
+  .pull-right{float:right}
+  .clearfix:after,.clearfix:before{content:'';display:table}
+  .clearfix:after{clear:both;display:block}
+  
+  .profile-card-wrap .content:before,
+  .profile-card-wrap .link-info .photo:after{
+    content:'';
+    position:absolute;
+  }
+  .profile-card-wrap{
+    top:50%;
+    left:50%;
+    width:500px;
+    height:275px;
+    perspective:800px;
+    position:absolute;
+    margin-left:-400px;
+    margin-top:-137.5px;
+  }
+
+  .profile-card-wrap .content{
+    width:375px;
+    padding:30px;
+    height:inherit;
+    position:relative;
+    backface-visibility:hidden;
+    background:rgba(255,255,255,.5);
+    border:1px solid rgba(0,0,0,.35);
+    transform:rotateY(180deg);
+    transition:transform .4s ease-in-out 0s;
+  }
+  .profile-card-wrap .content:before{
+    top:50%;
+    right:40px;
+    height:30px;
+    font-size:18px;
+    border:inherit;
+    padding:2px 8px;
+    margin-top:-10px;
+    line-height:24px;
+    background:inherit;
+    content:attr(data-text);
+    backface-visibility:visible;
+    transform:rotateY(-180deg) scale(1);
+    transition:transform .4s ease-in-out 0s;
+    text-shadow:1px 1px 0 rgba(255,255,255,.45);
+  }
+  .profile-card-wrap .content .title{
+    font-size:24px;
+    font-weight:500;
+    margin-bottom:30px;
+  }
+  .profile-card-wrap .content p{
+    margin:0;
+    max-width:190px;
+    line-height:24px;
+    text-align:left;
+  }
+  .profile-card-wrap .link-info{
+    top:50%;
+    right:35px;
+    width:180px;
+    height:180px;
+    margin-top:-90px;
+    position:absolute;
+  }
+  
+  .profile-card-wrap .link-info .photo{
+    z-index:2;
+    width:inherit;
+    height:inherit;
+    overflow:hidden;
+    position:relative;
+    border-radius:50%;
+    border:5px solid #fff;
+    transform:scale(.6);
+    background:url(https://raw.githubusercontent.com/khadkamhn/profile-card/master/designer.jpg) #fff no-repeat center / cover;
+    box-shadow:0 0 2px, 0 5px 5px rgba(47,66,81,.75);
+    transition:transform .5s ease-in-out 0s;
+  }
+  .profile-card-wrap .link-info .photo:after{
+    width:170px;
+    height:170px;
+    border-radius:inherit;
+    /* background:rgba(54,106,157,.2); */
+  }
+  
+  .profile-card-wrap .check{display:none}
+  .profile-card-wrap .toggle{
+    top:50%;
+    z-index:5;
+    left:-20px;
+    width:40px;
+    height:40px;
+    color:#031b21;
+    cursor:pointer;
+    font-size:28px;
+    line-height:40px;
+    text-align:center;
+    margin-top:-15px;
+    border-radius:50%;
+    position:absolute;
+    background:#fff;
+    /* -webkit-user-select:none; */
+    box-shadow:0 4px 4px #333;
+    transition:color, background, transform .1s ease-in-out 0s;
+  }
+  .profile-card-wrap .check:checked + .toggle{
+    color:#fff;
+    background:#031b21;
+    transform:rotate(135deg);
+    box-shadow:2px -2px 4px #333;
+  }
+  .profile-card-wrap .check:checked + .toggle + .content{
+    transform:rotateX(0);
+  }
+  .profile-card-wrap .check:checked + .toggle + .content:before{
+    backface-visibility:hidden;
+    transform:rotateX(-180deg) scale(0);
+  }
+  .profile-card-wrap .check:checked + .toggle + .content + .link-info .link{
+    transform:none;
+  }
+  
+  .profile-card-wrap .check:checked + .toggle + .content + .link-info .photo{
+    transform:scale(1);
+    animation:bounceIn .4s;
+  }
+  
+  @keyframes bounceIn{
+    0%,20%,40%,60%,80%,100%{animation-timing-function:cubic-bezier(0.215, 0.610, 0.355, 1.000)}
+    0%{opacity:0;transform:scale3d(.3,.3,.3)}
+    20%{transform:scale3d(1.1,1.1,1.1)}
+    40%{transform:scale3d(.9,.9,.9)}
+    60%{opacity:1;transform:scale3d(1.03,1.03,1.03)}
+    80%{transform:scale3d(.97,.97,.97)}
+    100%{opacity:1;transform:scale3d(1,1,1)}
+  }
