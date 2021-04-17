@@ -45,7 +45,7 @@ class ProfilePage extends Component {
                     <div className="photo" style={{background : `url(${user.titlePhoto})  #fff no-repeat center / cover` } }></div>
                   </div>
                 </div>
-                {this.state.toggle && (<ContestSelecter {...this.props} contests={this.props.contests} updateContest = {this.props.updateContest} />)}
+                {this.state.toggle && (<ContestSelecter {...this.props} user={user} contests={this.props.contests} updateContest = {this.props.updateContest} updateRatingChange = {this.props.updateRatingChange} />)}
             </div>
             
         );

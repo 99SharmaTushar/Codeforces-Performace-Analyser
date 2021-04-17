@@ -5,6 +5,8 @@ import { Button, Message, Icon } from 'semantic-ui-react';
 import FinderSelect from 'react-finderselect'
 import 'react-finderselect/dist/index.css'
 
+const axios = require('axios');
+
 
 class contestSelecter extends Component {
 
@@ -33,6 +35,21 @@ class contestSelecter extends Component {
                 return (obj.contestId+"") === this.state.contestId
             });
             this.props.updateContest(selectedContest[0]);
+
+            const url = "http://localhost:5000/contest/ratingChange/"+ this.state.contestId+ "/" + this.props.user.handle ;
+            axios.get(url)
+                .then((response)=>{
+                    if(response.status!==200){
+                        this.setState({ error: "Sorry, we can't build your Performace Report... Please try again later !!" });
+                    }else {
+                        const obj = response.data;
+                        this.props.updateRatingChange(obj);
+                    }
+                })
+                .catch((err)=>{
+                    this.setState({error: err});
+                });
+            
             this.props.history.push("/report");
         }
     }
