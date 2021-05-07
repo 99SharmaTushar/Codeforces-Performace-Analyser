@@ -36,7 +36,7 @@ class contestSelecter extends Component {
             });
             this.props.updateContest(selectedContest[0]);
 
-            const url = "http://localhost:5000/contest/ratingChange/"+ this.state.contestId+ "/" + this.props.user.handle ;
+            const url = "/contest/ratingChange/"+ this.state.contestId+ "/" + this.props.user.handle ;
             axios.get(url)
                 .then((response)=>{
                     if(response.status!==200){

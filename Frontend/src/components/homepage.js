@@ -18,7 +18,7 @@ class HomePage extends Component {
         event.preventDefault();
         if(this.state.handle.length){
             this.setState({error: ""});
-            const urlForContestsGivenByUser = "http://localhost:5000/user/ratingChange/"+ this.state.handle;
+            const urlForContestsGivenByUser = "/user/ratingChange/"+ this.state.handle;
             axios.get(urlForContestsGivenByUser)
                 .then((response)=>{
                     if(response.status!==200){
@@ -34,7 +34,7 @@ class HomePage extends Component {
                     this.setState({ error: "Sorry, we can't find contests info of \"" + this.state.handle + "\" !!" });
                 })
 
-            const url = "http://localhost:5000/user/"+ this.state.handle ;
+            const url = "/user/"+ this.state.handle ;
             axios.get(url)
                 .then((response)=>{
                     if(response.data.status!=="OK"){
