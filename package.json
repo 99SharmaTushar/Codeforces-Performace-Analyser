@@ -1,17 +1,23 @@
 {
-  "name": "backend",
+  "name": "codeforces_performace_analyser",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix Frontend && npm run build --prefix Frontend"
   },
-  "author": "",
+  "author": "Tushar Sharma",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "nodemon": "^2.0.7",
     "url": "^0.11.0"
+  },
+  "engines": {
+    "node": "14.15.1",
+    "npm": "6.14.8"
   }
 }
