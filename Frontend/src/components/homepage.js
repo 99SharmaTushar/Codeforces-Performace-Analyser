@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Grid, Icon, Button, Message, Header } from 'semantic-ui-react';
+import Footer from './footer';
 const axios = require('axios');
 
 class HomePage extends Component {
@@ -30,6 +31,7 @@ class HomePage extends Component {
                 })
                 .catch((err)=>{
                     this.setState({error: err});
+                    this.setState({ error: "Sorry, we can't find contests info of \"" + this.state.handle + "\" !!" });
                 })
 
             const url = "http://localhost:5000/user/"+ this.state.handle ;
@@ -45,6 +47,7 @@ class HomePage extends Component {
                 })
                 .catch((err)=>{
                     this.setState({error: err});
+                    this.setState({ error: "Sorry, we can't find a user with \"" + this.state.handle + "\"as handle !!" });
                 })
         }else {
             this.setState({ error: "We can't analyse your performance without your Codeforces Handle" });
@@ -53,7 +56,8 @@ class HomePage extends Component {
 
     render(){
         return(
-            <Grid textAlign="center" verticalAlign="middle" className="homeGrid">
+            <div>
+            <Grid textAlign="center" verticalAlign="middle" style={{ height: "100vh"}}>
                 <Grid.Column style={ {maxWidth: 457} }>
                     <Header as="h1" icon color="blue" textAlign="center">
                         <Icon name="code" color="blue" />
@@ -72,6 +76,8 @@ class HomePage extends Component {
                     )}
                 </Grid.Column>
             </Grid>
+            <Footer />
+            </div>
         );
     }
 }

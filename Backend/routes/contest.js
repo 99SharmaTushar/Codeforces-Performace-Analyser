@@ -19,12 +19,6 @@ router.route('/ratingChange/:id/:userHandle').get((req,res)=>{
             ratingChange = ratingChange.result;
             var totalParticipants = ratingChange.length;
             
-            // var index = ratingChange.findIndex(obj => {
-            //     let str = obj.handle;
-            //     let str2 = userHandle;
-            //     return str.toUpperCase() === str2.toUpperCase();
-            // });
-            
             var index=-1, numOfInc=0, numOfDec=0, noChange=0;
             ratingChange.forEach((item,pos)=>{
                 if(item.newRating-item.oldRating>0) numOfInc++;
@@ -53,7 +47,7 @@ router.route('/ratingChange/:id/:userHandle').get((req,res)=>{
                 averageRating+=ratingChange[i].oldRating;
             }
             averageRating/=(end-start+1);
-
+            
             //Calculating Average Rank
             var averageRank =0, count=0, start=index-200, end=index+200, newRating=ratingChange[index].newRating;
             oldRating=ratingChange[index].oldRating;
@@ -72,6 +66,25 @@ router.route('/ratingChange/:id/:userHandle').get((req,res)=>{
             }
             if(count!=0) averageRank/=count;
 
+            var avgRankComment = "";
+            if(Math.abs(averageRank-yourRank)<=5){
+                avgRankComment="So, your performace was decent, as far as your rank in concerned.";
+            }else if(averageRank-yourRank>-5){
+                avgRankComment="So, you performed better than the expectations, as far as your rank in concerned.";
+            }else {
+                avgRankComment="So, your performance didn't matched with the expectations, as far as your rank in concerned.";
+            }
+
+            var avgRatingComment = "";
+            if(Math.abs(averageRating-oldRating)<=20){
+                avgRatingComment="So, your rank resonates with your rating.";
+            }else if(averageRating-oldRating>20){
+                avgRatingComment="So, you definitely performed better than peers of same rating as yours.";
+            }else{
+                avgRatingComment="So, you could have performed a bit better as compared to the peers having same rating as yours.";
+            }
+
+
             res.redirect(urlx.format({
                 pathname:"/contest/standings/",
                 query: {
@@ -80,14 +93,13 @@ router.route('/ratingChange/:id/:userHandle').get((req,res)=>{
                     "userHandle" : userHandle,
                     "percentile" : percentile,
                     "averageRating" : averageRating, //rating expected at your got rank.. so u underperformed or overperformed as compared to your peers
-                    //write a comment in UI that average rating works best when u r ranked in middle i.e 2.5% to 97.5% range or so
-                    //give reason for the same in UI as because several low ranked accounts win, etc.. and high ranked leave (if)..etc
-                    //also remember that everyone isn't intrested in reason... so plan out a way or don't show reason at all
                     "averageRank" : averageRank, //ki yeh rank aani chahiye thi tumhari.. aur aai kya exactly... compare then...
                     "yourRank" : yourRank,
-                    "oldRating" : oldRating, //Show that this was ur rating before this this contest
-                    "newRating" : newRating, // You gained/lost this much rating... 
-                    "overallRatingChange" : [numOfInc,numOfDec,noChange]
+                    "oldRating" : oldRating,
+                    "newRating" : newRating,
+                    "overallRatingChange" : [numOfInc,numOfDec,noChange],
+                    "avgRankComment" : avgRankComment,
+                    "avgRatingComment" : avgRatingComment
                  }
               }));
         });
@@ -99,6 +111,7 @@ router.route('/ratingChange/:id/:userHandle').get((req,res)=>{
 router.route('/standings/').get((req,res)=>{
     const contestId = req.query.contestId;
     const userHandle = req.query.userHandle;
+    const rank = req.query.yourRank;
     oldRating=req.query.oldRating;
 
     const url = "https://codeforces.com/api/contest.standings?contestId="+contestId;
@@ -160,19 +173,19 @@ router.route('/standings/').get((req,res)=>{
                     var attemptCount = standings.rows[index].problemResults[pos].rejectedAttemptCount;
                     commentsForProblems['problemInfo'] = { "index" : problems[pos].index, "name" : problems[pos].name};
                     if(diff>=50){
-                        commentsForProblems['problemComment'] = "You should have definitely solved this problem... ";
+                        commentsForProblems['problemComment'] = "You should have definitely solved this problem...(based on your Ratings)";
                     }else if(diff<=-50){
                         commentsForProblems['problemComment'] = "Although, this problem was a bit hard relative to your rating";
                     }else{
-                        commentsForProblems['problemComment'] = "This problem falls close to your rating skills";
+                        commentsForProblems['problemComment'] = "This problem falls close to your skills... (based on your Ratings)";
                     }
                     if(attemptCount == 0)
                     {
-                        commentsForProblems['attemptComment1'] = "Man !! You should have atleast given this problem a try";
+                        commentsForProblems['attemptComment1'] = "Hey !! You should have atleast given this problem a try";
                         commentsForProblems['attemptComment2'] = "Was it that you ran out of time ?? Or were you not able to figure out the solution... or something else?? Time to give it a Thought !!";
                     }else {
                         commentsForProblems['attemptComment1'] = `It's a good thing that you tried attempting it ${attemptCount} time${(attemptCount==1)?"":"s"} ... `;
-                        commentsForProblems['attemptComment2'] = "These unsuccessful attempts are path to your success destination !!! "
+                        commentsForProblems['attemptComment2'] = "These unsuccessful attempts are path to your success !!! "
                     }
                     commentsForProblems['tagsComment'] = "You are strongly advised to solve problems of the following tags:";
                     commentsForProblems['tags'] = problems[pos].tags;
@@ -185,10 +198,11 @@ router.route('/standings/').get((req,res)=>{
                     });
                     var zeroSum = req.query.totalParticipants-factSum;
                     someFacts.push("There were "+ zeroSum +" contestants who weren't able to solve a single problem !!");
-                    ifProblemSolve="If you would have just solved this problem, no matter how much time you would have taken... You would have atleast been ranked "+ sum;
-                    //Write a comment in UI after rendering ifProblemSolve element that see for yourself... that how much difference a single problem could make
-                    //Write a same comment related to timing also...
-                    //Read all the comments.. pls.. lol :=}
+                    ifProblemSolve="If you would have just solved this problem, no matter how much time you would have taken... You would have atleast been ranked "+ (++sum);
+                    if(sum>rank){
+                        ifProblemSolve+=" (:-? We Can't understand how come you are ranked what you are ranked... Consider yourself Lucky!!)"
+                    }
+                    
                 }
             });
 
@@ -199,25 +213,21 @@ router.route('/standings/').get((req,res)=>{
                 ifProblemSolve="You are Awesome !!! This Performance Analyser would crash if it tries analysing your Performance !!";
             }
 
-            someFacts.push("There were "+req.query.overallRatingChange[0]+" contestants who got an increase in rating & "+req.query.overallRatingChange[1]+" contestants who got a negative rating change");
-            someFacts.push("There were "+req.query.overallRatingChange[2] + " contestants whose rating remained the same after the contest !!!");
+            someFacts.push("There were "+req.query.overallRatingChange[1]+" contestants who got a negative rating change :-( & "+req.query.overallRatingChange[0]+" contestants who got an increase in rating :-)");
+            someFacts.push("There were "+req.query.overallRatingChange[2] + " contestants whose rating remained the same after the contest!");
 
             res.json({
                 ...req.query,
-                //Write in UI that this site also provides a Relative comparision of your performacnce .. etc
                 "totalProblems" : totalProblems,
-                "problemSolvedBy": problemSolvedBy,//Represent it by google chart or something... it shows how many solved problem A, how many solved problem B,etc
-                "numOfProblemsSolved" : numberOfProblemsSolved,//Represent it also by google chart... it shows how many were able to solve only one problem, how many were able to solve two problems, etc...
-                "youSolved": youSolved, // Tells how many problems were solved by you
-                "whichSolved": whichSolved, // Tells what problems have you solved
-                // IF you would have just solved this problem...even till the last minute... then you would have ranked or gained rating this this... (it shows never give up till last)
-                "problems" : problems,//Use this in representing all the problems in form of google charts and tell how many solved.. whether you solved it or not .. etc
-                "yourProblems": yourProblems, //Use these to make a chart type..or something else... depicting problem wise.. that these many were able to solve this problem,, were you able to solve it? yes then in green candle... no then red candle... and show the number of attempts on the top of your green / red candle....
+                "problemSolvedBy": problemSolvedBy,
+                "numOfProblemsSolved" : numberOfProblemsSolved,
+                "youSolved": youSolved,
+                "whichSolved": whichSolved,
+                "problems" : problems,
+                "yourProblems": yourProblems,
                 "commentsForProblems": commentsForProblems,
                 "ifProblemSolve" : ifProblemSolve,
                 "someFacts" : someFacts
-                //Write it in the UI or your blog post that :
-                // It is very difficult to generalise the algorithm to analyse performace, but we have given my best efforts to do so... (blah blah ki agar kuch feedback, features, help, etc ...)
             });
         });
 

@@ -1,13 +1,10 @@
-/* Google font */
-@import url('https://fonts.googleapis.com/css?family=Dancing+Script');
 body {
   background-color: rgba(0,0,0,0.1);
-  /* text-align: left; */
 }
 
 /* styling paper */
 #paper {
-  width: 90%;
+  width: 80%;
   height: 100%;
   position: relative;
   margin: 4% auto;
@@ -40,8 +37,20 @@ body {
   padding-left: 56px;
   padding-right: 16px;
   line-height: 25px;
-  font-family: 'Dancing Script', cursive;
+  font-family: courier, monospace;
   font-size: 19px;
   letter-spacing: 1px;
   word-spacing: 5px;
+}
+
+@media screen and (min-width: 940px){
+  .flex-container {
+      display: flex;
+      padding-left: 10%;
+  }    
+}
+@media screen and (min-width: 640px){
+  .flex-container {     
+      padding-left: 10%;
+  }    
 }

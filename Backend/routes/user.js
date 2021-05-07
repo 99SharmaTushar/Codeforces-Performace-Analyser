@@ -26,10 +26,20 @@ router.route('/ratingChange/:handle').get((req,res)=>{
         response.on('data',(chunk)=>{
             ratingChanges += chunk;
         });
-
+        
         response.on('end',()=>{
             ratingChanges = JSON.parse(ratingChanges);
-            res.json({"contests": ratingChanges.result});
+            var pos = 0;
+            if(ratingChanges.result !== undefined){
+                 ratingChanges.result.forEach(contest => {
+                    if(contest.newRating>contest.oldRating)
+                        pos++;
+            });
+            }
+            res.json({
+                "contests": ratingChanges.result,
+                "pos":pos
+                });
         });
     });
     
