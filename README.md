@@ -1,5 +1,5 @@
 # Codeforces-Performace-Analyser
-The website uses Codeforces API. Try it out here: [www.contestanalyser.codes](http://www.contestanalyser.codes/)
+The website uses Codeforces API. Try it out here: [www.contestanalyser.codes](https://desolate-lowlands-12852.herokuapp.com/)
 
 * It provides a medium to analyse all the contests given by you, by building a Performance Report of the Selected Contest.
 * It provides some basic stats of the contest, and several statements based on your performance compared with others __relatively__. It also suggests problem tags to be practiced, and puts forward some random facts related to the contest.
